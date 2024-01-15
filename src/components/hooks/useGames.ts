@@ -1,4 +1,3 @@
-
 import {useEffect, useState} from "react";
 import apiClient from "../../services/api-client.ts";
 import {CanceledError} from "axios";
@@ -15,7 +14,7 @@ export interface Game {
     background_image: string
     // Parent platform is not a platform array which is should be
     // instead it is an array of objects where each object has a property called platform
-    parent_platforms: {platform: Platform}[]
+    parent_platforms: { platform: Platform }[]
     metacritic: number
 }
 
@@ -28,21 +27,27 @@ interface FetchGamesResponse {
 const useGames = () => {
     const [games, setGames] = useState<Game[]>([])
     const [error, setError] = useState('')
+    const [isLoading, setLoading] = useState(false)
 
     useEffect(() => {
         const controller = new AbortController()
 
+        setLoading(true)
         apiClient.get<FetchGamesResponse>('/games', {signal: controller.signal})
-            .then(response => setGames(response.data.results))
+            .then(response => {
+                setGames(response.data.results)
+                setLoading(false)
+            })
             .catch(err => {
                 if (err instanceof CanceledError) return
-                    setError(err.message)
+                setError(err.message)
+                setLoading(false)
             })
 
         return () => controller.abort()
     }, [])
 
-    return {games, error}
+    return {games, error, isLoading}
 }
 
 export default useGames
