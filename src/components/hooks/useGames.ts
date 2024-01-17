@@ -15,6 +15,8 @@ export interface Game {
     // instead it is an array of objects where each object has a property called platform
     parent_platforms: { platform: Platform }[]
     metacritic: number
+    rating_top: number
+    rating: number
 }
 
 
