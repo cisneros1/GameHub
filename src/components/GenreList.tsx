@@ -1,14 +1,13 @@
-import useGenres, {Genre} from "./hooks/useGenres.ts";
-import {HStack, List, ListItem, Img, Spinner, Button, Heading} from "@chakra-ui/react";
+import useGenres from "../hooks/useGenres.ts";
+import {Button, Heading, HStack, Img, List, ListItem, Spinner} from "@chakra-ui/react";
 import getCroppedImageUrl from "../services/image-urls.ts";
+import useGameQueryStore from "../store.ts";
 
-interface Props {
-    onSelectGenre: (genre: Genre) => void
-    selectedGenre: Genre | null
-}
 
-const GenreList = ({selectedGenre, onSelectGenre}: Props) => {
+const GenreList = () => {
     const {data, isLoading, error} = useGenres()
+    const selectedGenreId = useGameQueryStore(s => s.gameQuery.genreId)
+    const setSelectedGenreId = useGameQueryStore(s => s.setGenreId)
 
     if (error) return null
     if (isLoading) return <Spinner/>
@@ -17,7 +16,7 @@ const GenreList = ({selectedGenre, onSelectGenre}: Props) => {
         <>
             <Heading fontSize={'2xl'} marginBottom={3}>Genres</Heading>
             <List>
-                {data.results.map((genre) =>
+                {data?.results.map((genre) =>
                     <ListItem key={genre.id} paddingY={'5px'}>
                         <HStack>
                             <Img boxSize={'32px'}
@@ -26,8 +25,8 @@ const GenreList = ({selectedGenre, onSelectGenre}: Props) => {
                                  src={getCroppedImageUrl(genre.image_background)}
                             />
                             <Button whiteSpace={'normal'} textAlign={"left"}
-                                    fontWeight={genre.id === selectedGenre?.id ? 'bold' : 'normal'}
-                                    onClick={() => onSelectGenre(genre)} fontSize={'lg'}
+                                    fontWeight={genre.id === selectedGenreId ? 'bold' : 'normal'}
+                                    onClick={() => setSelectedGenreId(genre.id)} fontSize={'lg'}
                                     variant={'link'}>{genre.name}</Button>
                         </HStack>
                     </ListItem>)}
