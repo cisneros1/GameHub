@@ -1,7 +1,7 @@
 import {HStack, Image} from '@chakra-ui/react'
 import logo from '../assets/logo.webp'
 import ColorModeSwitch from "./ColorModeSwitch.tsx";
-import SearchInput from "../hooks/SearchInput.tsx";
+import SearchInput from "./SearchInput.tsx";
 
 
 const NavBar = () => {
