@@ -1,12 +1,10 @@
 import {useParams} from "react-router-dom";
 import useGame from "../hooks/useGame.ts";
-import {Heading, SimpleGrid, Spinner, Text} from "@chakra-ui/react";
+import {Heading, Spinner} from "@chakra-ui/react";
 import ExpandableText from "../components/ExpandableText.tsx";
-import CriticScore from "../components/CriticScore.tsx";
-import DefinitionItem from "../components/DefinitionItem.tsx";
-import {Publisher} from "../entities/Publisher.ts";
-import {Genre} from "../entities/Genre.ts";
 import GameAttributes from "../components/GameAttributes.tsx";
+import GameTrailer from "../components/GameTrailer.tsx";
+import GameScreenShots from "../components/GameScreenShots.tsx";
 
 const GameDetailPage = () => {
 
@@ -22,6 +20,8 @@ const GameDetailPage = () => {
             <Heading>{game.name}</Heading>
             <ExpandableText>{game.description_raw}</ExpandableText>
             <GameAttributes game={game}/>
+            <GameTrailer gameId={game.id}/>
+            <GameScreenShots gameId={game.id}/>
         </>
     )
 }
