@@ -1,31 +1,40 @@
-import {Button, Menu, MenuButton, MenuItem, MenuList} from "@chakra-ui/react";
-import {BsChevronDown} from "react-icons/all";
+import { Button, Menu } from "@chakra-ui/react";
+import { BsChevronDown } from "react-icons/bs";
 import usePlatforms from "../hooks/usePlatforms.ts";
 import usePlatform from "../hooks/usePlatform.ts";
 import useGameQueryStore from "../store.ts";
 
-
 const PlatformSelector = () => {
-    const {data, error} = usePlatforms()
-    const setSelectedPlatformId = useGameQueryStore(s => s.setPlatformId)
-    const selectedPlatformId = useGameQueryStore(s => s.gameQuery.platformId)
-    const selectedPlatform = usePlatform(selectedPlatformId)
+    const { data, error } = usePlatforms();
+    const setSelectedPlatformId = useGameQueryStore((s) => s.setPlatformId);
+    const selectedPlatformId = useGameQueryStore((s) => s.gameQuery.platformId);
+    const selectedPlatform = usePlatform(selectedPlatformId);
 
-    if (error) return null
+    if (error) return null;
 
     return (
-
-        <Menu>
-            <MenuButton as={Button} rightIcon={<BsChevronDown/>}>
-                {selectedPlatform?.name || 'Platforms'}
-            </MenuButton>
-            <MenuList>
-                {data?.results.map(platform => <MenuItem onClick={() => setSelectedPlatformId(platform.id)}
-                                                         key={platform.id}>{platform.name}</MenuItem>)}
-            </MenuList>
-        </Menu>
-
-    )
-}
+        <Menu.Root>
+            <Menu.Trigger asChild>
+                <Button>
+                    {selectedPlatform?.name ?? "Platforms"}
+                    <BsChevronDown />
+                </Button>
+            </Menu.Trigger>
+            <Menu.Positioner>
+                <Menu.Content>
+                    {data?.results.map((platform) => (
+                        <Menu.Item
+                            key={platform.id}
+                            value={String(platform.id)}
+                            onSelect={() => setSelectedPlatformId(platform.id)}
+                        >
+                            {platform.name}
+                        </Menu.Item>
+                    ))}
+                </Menu.Content>
+            </Menu.Positioner>
+        </Menu.Root>
+    );
+};
 
 export default PlatformSelector
